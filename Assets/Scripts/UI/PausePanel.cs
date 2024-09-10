@@ -2,36 +2,27 @@ using UnityEngine;
 
 public class PausePanel : MonoBehaviour
 {
-    [SerializeField] private Bird _bird;
-    [SerializeField] private ContinueButton _continueButton;
+    [SerializeField] private PauseHandler _pauseHandler;
+
+    private float StopTime = 0;
+    private float ContinueTime = 1;
 
     private void Start()
     {
-        CLose();
-        _bird.GameOver += Open;
+        Close();
     }
 
-    public void CLose()
+    public void Close()
     {
-        Time.timeScale = 1;
+        Time.timeScale = ContinueTime;
 
         gameObject.SetActive(false);
     }
 
     public void Open()
     {
-        Time.timeScale = 0; 
+        Time.timeScale = StopTime;
 
         gameObject.SetActive(true);
-    }
-
-    public void DisableContinueButton()
-    {
-        _continueButton.gameObject.SetActive(false);
-    }
-
-    public void EnableContinueButton()
-    {
-        _continueButton.gameObject.SetActive(true);
     }
 }

@@ -1,3 +1,1 @@
-using UnityEngine;
-
-public class EnemyBulletPool : Pool<EnemyBullet> {}
+public class EnemyBulletPool : Pool<Bullet> {}

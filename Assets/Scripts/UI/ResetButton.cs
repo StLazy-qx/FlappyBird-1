@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,11 +7,11 @@ public class ResetButton : MonoBehaviour
 {
     [SerializeField] private PausePanel _pausePanel;
     [SerializeField] private Bird _bird;
-    [SerializeField] private EnemyPool _pool;
+    [SerializeField] private EnemySpawner _enemySpawner;
 
     private Button _button;
 
-    private void Start()
+    private void Start() 
     {
         _button = GetComponent<Button>();
 
@@ -23,9 +21,8 @@ public class ResetButton : MonoBehaviour
 
     private void OnButtonClick()
     {
-        _pausePanel.CLose();
-        _pausePanel.EnableContinueButton();
         _bird.Reset();
-        _pool.Reset();
+        _enemySpawner.Reset();
+        _pausePanel.Close();
     }
 }

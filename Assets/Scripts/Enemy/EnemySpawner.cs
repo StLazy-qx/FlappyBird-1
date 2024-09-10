@@ -8,50 +8,29 @@ public class EnemySpawner : Spawner<Pool<Enemy>, Enemy>
 
     private void Update()
     {
-        AttemptSpawn();
+        InitializeObject();
     }
 
     private void OnEnable()
     {
-        _bird.GameOver += Reset;
+        _bird.Reseting += Reset;
     }
 
     private void OnDisable()
     {
-        _bird.GameOver -= Reset;
+        _bird.Reseting -= Reset;
     }
 
-    protected override void PerformSpawn()
+    protected override void SetStateObject()
     {
         Enemy newEnemy = GetObject();
-        Vector2 spawnPosition = DetermineSpawnCoordinate();
 
-        ActivateObject(newEnemy, spawnPosition);
-    }
-
-    protected override Enemy GetObject()
-    {
-        Enemy newEnemy = Pool.GetObject();
-
-        newEnemy.ResetBulletPool();
-        return newEnemy;
+        newEnemy.transform.position = DetermineSpawnCoordinate();
     }
 
     private Vector2 DetermineSpawnCoordinate()
     {
-        float randomPositionY = Random.Range(_minCoordinateSpawnY, _maxCoordinateSpawnY);
-        Vector2 randomPosition = new Vector2(SpawnPlace.position.x, randomPositionY);
-
-        return randomPosition;
-    }
-
-    protected override void Reset()
-    {
-        base.Reset();
-
-        foreach (Enemy enemy in Pool.GetObjectsList())
-        {
-            enemy.ResetBulletPool();
-        }
+        return new Vector2(SpawnPlace.position.x,
+            Random.Range(_minCoordinateSpawnY, _maxCoordinateSpawnY));
     }
 }

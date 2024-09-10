@@ -2,50 +2,61 @@ using UnityEngine;
 
 public class PauseHandler : MonoBehaviour
 {
-    [SerializeField] private PausePanel _pausePanel;
     [SerializeField] private Bird _bird;
+    [SerializeField] private BirdMover _birdMover;
+    [SerializeField] private BirdShooter _birdShooter;
+    [SerializeField] private InputReader _inputPauseKey;
+    [SerializeField] private PausePanel _pausePanel;
 
-    private KeyCode _pauseKey = KeyCode.Escape;
-    private bool _isPaused = false;
+    public bool IsPaused { get; private set; }
 
-    public bool IsPaused => _isPaused;
-
-    private void Update()
+    private void Start()
     {
-        if (_bird.IsLive)
-        {
-            if (Input.GetKeyDown(_pauseKey))
-            {
-                TogglePause();
-            }
-        }
+        IsPaused = false;
+    }
 
-        if (_bird.IsLive == false)
-        {
-            _isPaused = true;
-            _pausePanel.DisableContinueButton();
-        }
+    private void OnEnable()
+    {
+        _bird.GameOvered += StopGame;
+        _bird.Reseting += ContinueGame;
+        _inputPauseKey.PauseKeyPressing += TogglePause;
+    }
+
+    private void OnDisable()
+    {
+        _bird.GameOvered -= StopGame;
+        _bird.Reseting -= ContinueGame;
+        _inputPauseKey.PauseKeyPressing -= TogglePause;
     }
 
     private void TogglePause()
     {
-        _isPaused = !_isPaused;
+        IsPaused = !IsPaused;
 
-        if(_isPaused)
+        if (_bird.IsLive)
         {
-            _pausePanel.Open();
+            if (IsPaused)
+                StopGame();
+            else
+                ContinueGame();
         }
-        else
-        {
-            _pausePanel.CLose();
-        }
+    }
+
+    public void StopGame()
+    {
+        IsPaused = true;
+        _birdMover.enabled = false;
+        _birdShooter.enabled = false;
+
+        _pausePanel.Open();
     }
 
     public void ContinueGame()
     {
-        if (_bird.IsLive == false)
-            return;
+        IsPaused = false;
+        _birdMover.enabled = true;
+        _birdShooter.enabled = true;
 
-        _isPaused = false;
+        _pausePanel.Close();
     }
 }

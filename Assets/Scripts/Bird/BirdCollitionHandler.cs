@@ -15,10 +15,9 @@ public class BirdCollitionHandler : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out GroundZone groundZone))
+        if (collision.TryGetComponent<GroundZone>(out _))
         {
             _bird.Destroy();
-            _pausePanel.DisableContinueButton();
         }
     }
 }

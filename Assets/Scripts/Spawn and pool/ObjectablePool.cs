@@ -6,12 +6,12 @@ public abstract class ObjectablePool : MonoBehaviour
 
     protected abstract void OnTriggerEnter2D(Collider2D collision);
 
-    public virtual void Enable()
+    public void Activate()
     {
         gameObject.SetActive(true);
     }
 
-    public virtual void Disable()
+    public void Deactivate()
     {
         gameObject.SetActive(false);
     }

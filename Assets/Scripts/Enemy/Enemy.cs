@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Enemy : ObjectablePool, IDamageable
 {
-    [SerializeField] private int _touchDamage;
-    [SerializeField] private EnemyBulletPool _bulletPool;
+    [SerializeField] private EnemyShooter _bulletSpawner;
 
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
@@ -14,24 +13,24 @@ public class Enemy : ObjectablePool, IDamageable
             if (bird != null)
             {
                 bird.Destroy();
-                Disable();
+                Destroy();
             }
         }
 
         if (collision.TryGetComponent(out EnemyDestroyer destroyer))
         {
             if (destroyer != null)
-                Disable();
+                Destroy();
         }
     }
 
-    public void ResetBulletPool()
+    public void ResetState()
     {
-        _bulletPool.Reset();
+        _bulletSpawner.Reset();
     }
 
     public void Destroy()
     {
-        Disable();
+        Deactivate();
     }
 }

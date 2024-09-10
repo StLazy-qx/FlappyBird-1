@@ -1,37 +1,36 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 [RequireComponent(typeof(BirdMover))]
 
 public class Bird : MonoBehaviour, IDamageable
 {
-    private BirdMover _mover;
-    private bool _isLive;
+    private Vector3 _beginPosition;
 
-    public event UnityAction GameOver;
+    public event Action GameOvered;
+    public event Action Reseting;
 
-    public bool IsLive => _isLive;
+    public bool IsLive { get; private set; }
 
-    private void Awake()
+    private void Start()
     {
-        _isLive = true;
-        _mover = GetComponent<BirdMover>();
+        _beginPosition = transform.position;
+        IsLive = true;
     }
 
     public void Reset()
     {
-        _isLive = true;
+        transform.position = _beginPosition;
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+        IsLive = true;
 
-        _mover.Reset();
+        Reseting?.Invoke();
     }
 
     public void Destroy()
     {
-        if (_isLive == true)
-        {
-            _isLive = false;
-
-            GameOver?.Invoke();
-        }
+        IsLive = false;
+        
+        GameOvered?.Invoke();
     }
 }

@@ -1,49 +1,50 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
 
-public abstract class Bullet : ObjectablePool
+public class Bullet : ObjectablePool
 {
     [SerializeField] protected float Speed;
-    
+    [SerializeField] protected float Lifetime;
+    [SerializeField] private LayerMask targetLayerMask;
+
     protected Vector2 Direction;
-    private float _elapsedTime = 0;
 
     private void Update()
     {
-        if (IsActive)
-        {
-            HandleLifetime();
+        transform.Translate(Direction * Speed * Time.deltaTime);
+    }
 
-            transform.Translate(Direction * Speed * Time.deltaTime);
-        }
-        else
-        {
-            _elapsedTime = 0;
-        }
+    private void OnEnable()
+    {
+        StartCoroutine(MonitorLifetime());
+    }
+
+    private void OnDisable()
+    {
+        StopCoroutine(MonitorLifetime());
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
+        if (((1 << collision.gameObject.layer) & targetLayerMask) != 0)
         {
-            damageable.Destroy();
+            if (collision.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.Destroy();
+                Deactivate();
+            }
         }
-
-        Disable();
     }
 
-    protected void HandleLifetime()
+    private IEnumerator MonitorLifetime()
     {
-        float timeLife = 5;
-        _elapsedTime += Time.deltaTime;
+        WaitForSeconds waitForSeconds = new WaitForSeconds(Lifetime);
 
-        if (_elapsedTime > timeLife)
-        {
-            _elapsedTime = 0;
+        yield return waitForSeconds;
 
-            Disable();
-        }
+        Deactivate();
     }
 
     public virtual void SetDirection(Vector2 direction = default)

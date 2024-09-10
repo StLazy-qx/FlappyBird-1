@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events; 
 
@@ -7,44 +8,36 @@ public abstract class Spawner<T,N> : MonoBehaviour where T : Pool <N> where N : 
     [SerializeField] protected Transform SpawnPlace;
     [SerializeField] protected float Cooldown;
 
-    protected float ElapsedTime = 0;
+    protected float ElapsedTime;
 
     private void Start()
     {
         Pool.Initialize();
     }
 
-    protected abstract void PerformSpawn();
+    protected abstract void SetStateObject();
 
-    protected virtual void AttemptSpawn()
+    protected virtual void InitializeObject()
     {
         ElapsedTime += Time.deltaTime;
 
         if (ElapsedTime > Cooldown)
         {
-            ElapsedTime = 0;
+            SetStateObject();
 
-            PerformSpawn();
+            ElapsedTime = 0;
         }
     }
 
     protected virtual N GetObject()
     {
-        N newObject = Pool.GetObject();
-        Vector2 direction = SpawnPlace.position;
+        Vector2 position = SpawnPlace.position;
+        N newObject = Pool.GetObject(position);
 
-        ActivateObject(newObject, direction);
         return newObject;
     }
 
-    protected void ActivateObject(N obj, Vector2 position)
-    {
-        obj.transform.position = position;
-
-        obj.Enable();
-    }
-
-    protected virtual void Reset()
+    public virtual void Reset()
     {
         Pool.Reset();
     }

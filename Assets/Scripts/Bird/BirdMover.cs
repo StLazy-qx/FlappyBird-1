@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BirdMover : MonoBehaviour
 {
+    [SerializeField] private InputReader _inputKeyMove;
     [SerializeField] private PauseHandler _pauseHandler;
     [SerializeField] private float _speed;
     [SerializeField] private float _tapForca;
@@ -12,55 +13,50 @@ public class BirdMover : MonoBehaviour
     [SerializeField] private float _minRotationZ;
     [SerializeField] private float _maxPosition;
 
-    private Vector3 _startPosition;
     private Rigidbody2D _rigidbody;
     private Quaternion _maxRotation;
     private Quaternion _minRotation;
-    private KeyCode _flyKey = KeyCode.Space;
-    private bool _isFly = false;
 
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-        _startPosition = transform.position;
         _maxRotation = Quaternion.Euler(0, 0, _maxRotationZ);
         _minRotation = Quaternion.Euler(0, 0, _minRotationZ);
+        _inputKeyMove.FlyKeyPressing += Fly;
 
         Reset();
     }
 
     private void Update()
     {
-        if (_pauseHandler.IsPaused == false)
-        {
-            if (Input.GetKeyDown(_flyKey))
-            {
-                _isFly = true;
-            }
-        }
+        transform.rotation = Quaternion.Lerp(transform.rotation,
+            _minRotation, _rotationSpeed * Time.deltaTime);
     }
 
-    private void FixedUpdate()
+    private void OnEnable()
     {
-        if (_isFly)
+        _inputKeyMove.FlyKeyPressing += Fly;
+    }
+
+    private void OnDisable()
+    {
+        _inputKeyMove.FlyKeyPressing -= Fly;
+    }
+
+    private void Fly()
+    {
+        if (transform.position.y < _maxPosition)
         {
-            if (transform.position.y < _maxPosition)
-            {
-                _rigidbody.velocity = new Vector2(_speed, _tapForca);
-                transform.rotation = _maxRotation;
-                _isFly = false;
-            }
+            _rigidbody.velocity = new Vector2(_speed, _tapForca);
+            transform.rotation = _maxRotation;
         }
 
-        transform.rotation = Quaternion.Lerp(transform.rotation, _minRotation, _rotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(transform.rotation,
+            _minRotation, _rotationSpeed * Time.deltaTime);
     }
 
     public void Reset()
     {
-        _pauseHandler.ContinueGame();
-
-        transform.position = _startPosition;
-        transform.rotation = Quaternion.Euler(0, 0, 0);
         _rigidbody.velocity = Vector2.zero;
     }
 }
