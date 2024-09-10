@@ -1,6 +1,4 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.Events; 
 
 public abstract class Spawner<T,N> : MonoBehaviour where T : Pool <N> where N : ObjectablePool
 {
@@ -8,19 +6,22 @@ public abstract class Spawner<T,N> : MonoBehaviour where T : Pool <N> where N : 
     [SerializeField] protected Transform SpawnPlace;
     [SerializeField] protected float Cooldown;
 
-    protected float ElapsedTime;
+    protected float ElapsedTime = 0;
 
     private void Start()
     {
         Pool.Initialize();
     }
 
+    private void Update()
+    {
+        ElapsedTime += Time.deltaTime;
+    }
+
     protected abstract void SetStateObject();
 
     protected virtual void InitializeObject()
     {
-        ElapsedTime += Time.deltaTime;
-
         if (ElapsedTime > Cooldown)
         {
             SetStateObject();

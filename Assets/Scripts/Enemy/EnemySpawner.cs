@@ -6,7 +6,7 @@ public class EnemySpawner : Spawner<Pool<Enemy>, Enemy>
     [SerializeField] private float _minCoordinateSpawnY;
     [SerializeField] private Bird _bird;
 
-    private void Update()
+    private void FixedUpdate()
     {
         InitializeObject();
     }

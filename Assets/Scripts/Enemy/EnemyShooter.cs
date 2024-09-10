@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemyShooter : Spawner<Pool<Bullet>, Bullet>
 {
-    private void Update()
+    private void FixedUpdate()
     {
         InitializeObject();
     }
