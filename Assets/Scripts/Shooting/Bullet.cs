@@ -10,6 +10,7 @@ public class Bullet : ObjectablePool
     [SerializeField] private LayerMask targetLayerMask;
 
     protected Vector2 Direction;
+    private Coroutine _lifeTimeCoroutine;
 
     private void Update()
     {
@@ -18,12 +19,14 @@ public class Bullet : ObjectablePool
 
     private void OnEnable()
     {
-        StartCoroutine(MonitorLifetime());
+        Stop();
+
+        _lifeTimeCoroutine = StartCoroutine(MonitorLifetime());
     }
 
     private void OnDisable()
     {
-        StopCoroutine(MonitorLifetime());
+        Stop();
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
@@ -45,6 +48,12 @@ public class Bullet : ObjectablePool
         yield return waitForSeconds;
 
         Deactivate();
+    }
+
+    private void Stop()
+    {
+        if (_lifeTimeCoroutine != null)
+            StopCoroutine(_lifeTimeCoroutine);
     }
 
     public virtual void SetDirection(Vector2 direction = default)

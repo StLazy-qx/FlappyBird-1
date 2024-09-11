@@ -8,7 +8,7 @@ public class BirdCollitionHandler : MonoBehaviour
 
     private Bird _bird;
 
-    private void Start()
+    private void Awake()
     {
         _bird = GetComponent<Bird>();
     }

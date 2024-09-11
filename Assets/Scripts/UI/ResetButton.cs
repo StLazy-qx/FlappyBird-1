@@ -11,12 +11,11 @@ public class ResetButton : MonoBehaviour
 
     private Button _button;
 
-    private void Start() 
+    private void Awake() 
     {
         _button = GetComponent<Button>();
 
-        if (_button != null)
-            _button.onClick.AddListener(OnButtonClick);
+        _button.onClick.AddListener(OnButtonClick);
     }
 
     private void OnButtonClick()
