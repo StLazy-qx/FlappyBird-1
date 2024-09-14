@@ -20,11 +20,11 @@ public class Bird : MonoBehaviour, IDamageable
 
     public void Reset()
     {
-        Reseting?.Invoke();
-
         transform.position = _beginPosition;
         transform.rotation = Quaternion.Euler(0, 0, 0);
         IsLive = true;
+
+        Reseting?.Invoke();
     }
 
     public void Destroy()

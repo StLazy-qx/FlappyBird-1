@@ -7,22 +7,22 @@ public class PausePanel : MonoBehaviour
     private float StopTime = 0;
     private float ContinueTime = 1;
 
-    private void Start()
+    private void Awake()
     {
         Close();
     }
 
     public void Close()
     {
-        Time.timeScale = ContinueTime;
-
         gameObject.SetActive(false);
+
+        Time.timeScale = ContinueTime;
     }
 
     public void Open()
     {
-        Time.timeScale = StopTime;
-
         gameObject.SetActive(true);
+
+        Time.timeScale = StopTime;
     }
 }

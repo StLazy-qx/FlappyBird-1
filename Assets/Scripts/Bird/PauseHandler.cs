@@ -44,19 +44,19 @@ public class PauseHandler : MonoBehaviour
 
     public void StopGame()
     {
+        _pausePanel.Open();
+
         IsPaused = true;
         _birdMover.enabled = false;
         _birdShooter.enabled = false;
-
-        _pausePanel.Open();
     }
 
     public void ContinueGame()
     {
+        _pausePanel.Close();
+
         IsPaused = false;
         _birdMover.enabled = true;
         _birdShooter.enabled = true;
-
-        _pausePanel.Close();
     }
 }

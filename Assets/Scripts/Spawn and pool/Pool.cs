@@ -14,11 +14,13 @@ public abstract class Pool<T> : MonoBehaviour where T : ObjectablePool
     private void OnEnable()
     {
         _bird.GameOvered += Reset;
+        _bird.Reseting += Reset;
     }
 
     private void OnDisable()
     {
         _bird.GameOvered -= Reset;
+        _bird.Reseting -= Reset;
     }
 
     public void Initialize()

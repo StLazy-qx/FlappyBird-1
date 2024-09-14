@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class EnemySpawner : Spawner<Pool<Enemy>, Enemy>
 {
+    [SerializeField] private EnemyBulletPool _enemyBullet;
     [SerializeField] private float _maxCoordinateSpawnY;
     [SerializeField] private float _minCoordinateSpawnY;
     [SerializeField] private Bird _bird;
 
     private void FixedUpdate()
     {
-        InitializeObject();
+        OutputObject();
     }
 
     private void OnEnable()
@@ -25,7 +26,7 @@ public class EnemySpawner : Spawner<Pool<Enemy>, Enemy>
     {
         Enemy newEnemy = GetObject();
 
-        newEnemy.transform.position = DetermineSpawnCoordinate();
+        newEnemy.Initialize(DetermineSpawnCoordinate(), _enemyBullet);
     }
 
     private Vector2 DetermineSpawnCoordinate()

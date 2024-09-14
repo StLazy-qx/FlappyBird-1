@@ -1,6 +1,7 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CircleCollider2D), typeof(EnemyMover))]
+[RequireComponent(typeof(CircleCollider2D), 
+    typeof(EnemyMover))]
 
 public class Enemy : ObjectablePool, IDamageable
 {
@@ -10,23 +11,18 @@ public class Enemy : ObjectablePool, IDamageable
     {
         if (collision.TryGetComponent(out Bird bird))
         {
-            if (bird != null)
-            {
-                bird.Destroy();
-                Destroy();
-            }
+            bird.Destroy();
+            Destroy();
         }
 
-        if (collision.TryGetComponent(out EnemyDestroyer destroyer))
-        {
-            if (destroyer != null)
-                Destroy();
-        }
+        if (collision.TryGetComponent<EnemyDestroyer>(out _))
+            Destroy();
     }
 
-    public void ResetState()
+    public void Initialize(Vector2 position, EnemyBulletPool bulletPool)
     {
-        _bulletSpawner.Reset();
+        transform.position = position;
+        _bulletSpawner.GetPool(bulletPool);
     }
 
     public void Destroy()

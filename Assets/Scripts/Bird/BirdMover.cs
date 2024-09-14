@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BirdMover : MonoBehaviour
 {
+    [SerializeField] private Bird _bird;
     [SerializeField] private InputReader _inputKeyMove;
     [SerializeField] private PauseHandler _pauseHandler;
     [SerializeField] private float _speed;
@@ -22,7 +23,6 @@ public class BirdMover : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
         _maxRotation = Quaternion.Euler(0, 0, _maxRotationZ);
         _minRotation = Quaternion.Euler(0, 0, _minRotationZ);
-        _inputKeyMove.FlyKeyPressing += Fly;
 
         Reset();
     }
@@ -36,11 +36,13 @@ public class BirdMover : MonoBehaviour
     private void OnEnable()
     {
         _inputKeyMove.FlyKeyPressing += Fly;
+        _bird.Reseting += Reset;
     }
 
     private void OnDisable()
     {
         _inputKeyMove.FlyKeyPressing -= Fly;
+        _bird.Reseting += Reset;
     }
 
     private void Fly()
@@ -55,7 +57,7 @@ public class BirdMover : MonoBehaviour
             _minRotation, _rotationSpeed * Time.deltaTime);
     }
 
-    public void Reset()
+    private void Reset()
     {
         _rigidbody.velocity = Vector2.zero;
     }

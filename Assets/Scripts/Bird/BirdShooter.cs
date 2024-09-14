@@ -6,12 +6,12 @@ public class BirdShooter : Spawner<Pool<Bullet>, Bullet>
 
     private void OnEnable()
     {
-        _inputShootKey.ShootKeyPressing += InitializeObject;
+        _inputShootKey.ShootKeyPressing += OutputObject;
     }
 
     private void OnDisable()
     {
-        _inputShootKey.ShootKeyPressing -= InitializeObject;
+        _inputShootKey.ShootKeyPressing -= OutputObject;
     }
 
     protected override void SetStateObject()

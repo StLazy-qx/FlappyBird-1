@@ -20,7 +20,7 @@ public abstract class Spawner<T,N> : MonoBehaviour where T : Pool <N> where N : 
 
     protected abstract void SetStateObject();
 
-    protected virtual void InitializeObject()
+    protected virtual void OutputObject()
     {
         if (ElapsedTime > Cooldown)
         {

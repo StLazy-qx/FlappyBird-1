@@ -4,7 +4,7 @@ public class EnemyShooter : Spawner<Pool<Bullet>, Bullet>
 {
     private void FixedUpdate()
     {
-        InitializeObject();
+        OutputObject();
     }
 
     protected override void SetStateObject()
@@ -13,5 +13,10 @@ public class EnemyShooter : Spawner<Pool<Bullet>, Bullet>
         Vector2 shootDirection = Vector2.left;
 
         newBullet.SetDirection(shootDirection);
+    }
+
+    public void GetPool(EnemyBulletPool bulletPool)
+    {
+        Pool = bulletPool;
     }
 }
