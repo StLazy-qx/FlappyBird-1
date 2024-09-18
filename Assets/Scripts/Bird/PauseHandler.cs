@@ -10,23 +10,23 @@ public class PauseHandler : MonoBehaviour
 
     public bool IsPaused { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
         IsPaused = false;
     }
 
     private void OnEnable()
     {
+        _inputPauseKey.PauseKeyPressing += TogglePause;
         _bird.GameOvered += StopGame;
         _bird.Reseting += ContinueGame;
-        _inputPauseKey.PauseKeyPressing += TogglePause;
     }
 
     private void OnDisable()
     {
+        _inputPauseKey.PauseKeyPressing -= TogglePause;
         _bird.GameOvered -= StopGame;
         _bird.Reseting -= ContinueGame;
-        _inputPauseKey.PauseKeyPressing -= TogglePause;
     }
 
     private void TogglePause()

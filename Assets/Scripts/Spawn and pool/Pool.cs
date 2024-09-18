@@ -4,9 +4,9 @@ using System.Linq;
 
 public abstract class Pool<T> : MonoBehaviour where T : ObjectablePool
 {
-    [SerializeField] private T _template;
-    [SerializeField] private Transform _container;
-    [SerializeField] private int _capacity;
+    [SerializeField] protected T Template; 
+    [SerializeField] protected Transform Container;
+    [SerializeField] protected int Capacity;
     [SerializeField] private Bird _bird;
 
     private List<T> _pool = new List<T>();
@@ -23,32 +23,28 @@ public abstract class Pool<T> : MonoBehaviour where T : ObjectablePool
         _bird.Reseting -= Reset;
     }
 
-    public void Initialize()
+    protected T CreateNewObject()
     {
-        for (int i = 0; i < _capacity; i++)
-        {
-            T newObj = Instantiate(_template, _container);
+        T newObj = Instantiate(Template, Container);
 
-            newObj.Deactivate();
-            _pool.Add(newObj);
-        }
+        newObj.Deactivate();
+        _pool.Add(newObj);
+
+        return newObj;
+    }
+
+    public virtual void Initialize()
+    {
+        for (int i = 0; i < Capacity; i++)
+            CreateNewObject();
     }
 
     public T GetObject(Vector2 position)
     {
-        T newObj = _pool.FirstOrDefault(îbj => îbj.IsActive == false);
-
-        if (newObj == null)
-        {
-            newObj = Instantiate(_template, _container);
-
-            newObj.Deactivate();
-            _pool.Add(newObj);
-        }
-
-        newObj.transform.position = position;
+        T newObj = _pool.FirstOrDefault(obj => !obj.IsActive) ?? CreateNewObject();
 
         newObj.Activate();
+        newObj.transform.position = position;
 
         return newObj;
     }

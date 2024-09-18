@@ -11,6 +11,12 @@ public class Bullet : ObjectablePool
 
     protected Vector2 Direction;
     private Coroutine _lifeTimeCoroutine;
+    private WaitForSeconds _waitLifetime;
+
+    private void Awake()
+    {
+        _waitLifetime = new WaitForSeconds(Lifetime);
+    }
 
     private void Update()
     {
@@ -19,14 +25,7 @@ public class Bullet : ObjectablePool
 
     private void OnEnable()
     {
-        Stop();
-
         _lifeTimeCoroutine = StartCoroutine(MonitorLifetime());
-    }
-
-    private void OnDisable()
-    {
-        Stop();
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
@@ -43,17 +42,9 @@ public class Bullet : ObjectablePool
 
     private IEnumerator MonitorLifetime()
     {
-        WaitForSeconds waitForSeconds = new WaitForSeconds(Lifetime);
-
-        yield return waitForSeconds;
+        yield return _waitLifetime;
 
         Deactivate();
-    }
-
-    private void Stop()
-    {
-        if (_lifeTimeCoroutine != null)
-            StopCoroutine(_lifeTimeCoroutine);
     }
 
     public virtual void SetDirection(Vector2 direction = default)

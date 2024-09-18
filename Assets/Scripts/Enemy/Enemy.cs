@@ -10,19 +10,15 @@ public class Enemy : ObjectablePool, IDamageable
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.TryGetComponent(out Bird bird))
-        {
             bird.Destroy();
-            Destroy();
-        }
 
         if (collision.TryGetComponent<EnemyDestroyer>(out _))
             Destroy();
     }
 
-    public void Initialize(Vector2 position, EnemyBulletPool bulletPool)
+    public void InitializeBulletPool(EnemyBulletPool bulletPool)
     {
-        transform.position = position;
-        _bulletSpawner.GetPool(bulletPool);
+        _bulletSpawner.SetPoolBullets(bulletPool);
     }
 
     public void Destroy()

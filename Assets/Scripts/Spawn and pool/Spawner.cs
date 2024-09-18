@@ -8,11 +8,6 @@ public abstract class Spawner<T,N> : MonoBehaviour where T : Pool <N> where N : 
 
     protected float ElapsedTime = 0;
 
-    private void Start()
-    {
-        Pool.Initialize();
-    }
-
     private void Update()
     {
         ElapsedTime += Time.deltaTime;
@@ -20,7 +15,7 @@ public abstract class Spawner<T,N> : MonoBehaviour where T : Pool <N> where N : 
 
     protected abstract void SetStateObject();
 
-    protected virtual void OutputObject()
+    protected void OutputObject()
     {
         if (ElapsedTime > Cooldown)
         {
@@ -30,15 +25,12 @@ public abstract class Spawner<T,N> : MonoBehaviour where T : Pool <N> where N : 
         }
     }
 
-    protected virtual N GetObject()
+    protected N GetObject(Vector2 position)
     {
-        Vector2 position = SpawnPlace.position;
-        N newObject = Pool.GetObject(position);
-
-        return newObject;
+        return Pool.GetObject(position);
     }
 
-    public virtual void Reset()
+    public void Reset()
     {
         Pool.Reset();
     }

@@ -1,8 +1,13 @@
 using UnityEngine;
 
-public class BirdShooter : Spawner<Pool<Bullet>, Bullet>
+public class BirdShooter : Spawner<BirdBulletPool, Bullet>
 {
     [SerializeField] private InputReader _inputShootKey;
+
+    private void Awake()
+    {
+        Pool.Initialize();
+    }
 
     private void OnEnable()
     {
@@ -16,9 +21,8 @@ public class BirdShooter : Spawner<Pool<Bullet>, Bullet>
 
     protected override void SetStateObject()
     {
-        Bullet bullet = GetObject();
-        Vector2 shootDirection = SpawnPlace.right;
+        Bullet bullet = GetObject(SpawnPlace.position);
 
-        bullet.SetDirection(shootDirection);
+        bullet.SetDirection(SpawnPlace.right);
     }
 }

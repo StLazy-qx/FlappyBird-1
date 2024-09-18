@@ -11,17 +11,17 @@ public class ContinueButton : MonoBehaviour
 
     private Button _button;
 
-    private void Start()
+    private void Awake()
     {
         _button = GetComponent<Button>();
-
-        _button.onClick.AddListener(OnButtonClick);
     }
 
     private void OnEnable()
     {
         _bird.GameOvered += Deactivate;
         _bird.Reseting += Activate;
+
+        _button.onClick.AddListener(OnButtonClick);
     }
 
     private void OnDisable()

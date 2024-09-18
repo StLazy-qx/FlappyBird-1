@@ -18,10 +18,16 @@ public class Bird : MonoBehaviour, IDamageable
         IsLive = true;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent<GroundZone>(out _))
+            Destroy();
+    }
+
     public void Reset()
     {
         transform.position = _beginPosition;
-        transform.rotation = Quaternion.Euler(0, 0, 0);
+        transform.rotation = Quaternion.identity;
         IsLive = true;
 
         Reseting?.Invoke();

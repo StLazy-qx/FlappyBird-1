@@ -1,11 +1,15 @@
 using UnityEngine;
 
-public class EnemySpawner : Spawner<Pool<Enemy>, Enemy>
+public class EnemySpawner : Spawner<EnemyPool, Enemy>
 {
-    [SerializeField] private EnemyBulletPool _enemyBullet;
     [SerializeField] private float _maxCoordinateSpawnY;
     [SerializeField] private float _minCoordinateSpawnY;
     [SerializeField] private Bird _bird;
+
+    private void Awake()
+    {
+        Pool.Initialize();
+    }
 
     private void FixedUpdate()
     {
@@ -24,9 +28,9 @@ public class EnemySpawner : Spawner<Pool<Enemy>, Enemy>
 
     protected override void SetStateObject()
     {
-        Enemy newEnemy = GetObject();
+        Vector2 currentPosition = DetermineSpawnCoordinate();
 
-        newEnemy.Initialize(DetermineSpawnCoordinate(), _enemyBullet);
+        GetObject(currentPosition);
     }
 
     private Vector2 DetermineSpawnCoordinate()

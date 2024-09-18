@@ -2,10 +2,8 @@ using UnityEngine;
 
 public class PausePanel : MonoBehaviour
 {
-    [SerializeField] private PauseHandler _pauseHandler;
-
-    private float StopTime = 0;
-    private float ContinueTime = 1;
+    private float _stopTime = 0;
+    private float _continueTime = 1;
 
     private void Awake()
     {
@@ -16,13 +14,13 @@ public class PausePanel : MonoBehaviour
     {
         gameObject.SetActive(false);
 
-        Time.timeScale = ContinueTime;
+        Time.timeScale = _continueTime;
     }
 
     public void Open()
     {
         gameObject.SetActive(true);
 
-        Time.timeScale = StopTime;
+        Time.timeScale = _stopTime;
     }
 }
